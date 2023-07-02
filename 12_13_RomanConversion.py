@@ -1,24 +1,28 @@
 import unittest
 
 class RomanConverter:
+    ROMAN_TO_INT_MAPPING = {
+        'I': 1, 'V': 5,
+        'X': 10, 'L': 50,
+        'C': 100, 'D': 500,
+        'M': 1000
+    }
+
+    INT_TO_ROMAN_MAPPING = [
+        ["I", "V", "X"],
+        ["X", "L", "C"],
+        ["C", "D", "M"],
+        ["M", "A", "A"]
+    ]
+
     def romanToInt(self, s: str) -> int:
         self._check_string_length(s)
-        
-        roman_to_int = {
-            'I': 1, 'V': 5,
-            'X': 10, 'L': 50,
-            'C': 100, 'D': 500,
-            'M': 1000
-        }
 
-        valid_values = roman_to_int.keys()
-        for char in s:
-            if char not in valid_values:
-                raise ValueError("s must be one of {}".format(valid_values))
+        self.check_valid_roman(s)
 
         result_array = []
         for char in reversed(s):
-            char_rst = roman_to_int[char]
+            char_rst = self.ROMAN_TO_INT_MAPPING[char]
             if not len(result_array):
                 pass
             else:
@@ -29,25 +33,18 @@ class RomanConverter:
             result_array.append(char_rst)
         result = sum(result_array)
 
-        self._check_result_range(result)
+        self._check_integer_range(result)
 
         return result
     
     def intToRoman(self, num: int) -> str:
-        self._check_num_range(num)
-
-        ROMAN_LIST = [
-            ["I", "V", "X"],
-            ["X", "L", "C"],
-            ["C", "D", "M"],
-            ["M", "A", "A"],
-        ]
-        
+        self._check_integer_range(num)
+    
         digit_list = [int(digit) for digit in reversed(str(num))]
         roman_symbols = []
         for i in range(len(digit_list)):
             digit = digit_list[i]
-            symbols = ROMAN_LIST[i]
+            symbols = self.INT_TO_ROMAN_MAPPING[i]
 
             if digit == 9:
                 roman_symbols.append(symbols[0] + symbols[2])
@@ -62,22 +59,24 @@ class RomanConverter:
         return result
     
     def _check_string_length(self, s: str):
-        if not (1 <= len(s) <= 15):
-            raise ValueError("s must have a length between 1 and 15")
-
         if not isinstance(s, str):
             raise TypeError("s must be a string")
         
-    def _check_result_range(self, result: int):
-        if not 1 <= result <= 3999:
-            raise ValueError("Result must be between 1 and 3999, your result is {}".format(result))
+        if not (1 <= len(s) <= 15):
+            raise ValueError("s must have a length between 1 and 15")
+    
+    def check_valid_roman(self, s: str):
+        valid_values = set(self.ROMAN_TO_INT_MAPPING.keys())
+        for char in s:
+            if char not in valid_values:
+                raise ValueError("s must be one of {}".format(valid_values))
 
-    def _check_num_range(self, num: int):
-        if not isinstance(num, int):
-            raise TypeError("num must be an integer")
+    def _check_integer_range(self, value: int):
+        if not isinstance(value, int):
+            raise TypeError("value must be an integer")
         
-        if not (1 <= num <= 3999):
-            raise ValueError("num must have a value between 1 and 3999")
+        if not (1 <= value <= 3999):
+            raise ValueError("value must have a value between 1 and 3999")
 
 class TestRomanToInt(unittest.TestCase):
     def setUp(self):
