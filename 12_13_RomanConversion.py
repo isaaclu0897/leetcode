@@ -2,6 +2,12 @@ import unittest
 
 
 class RomanConverter:
+    """規則
+    1. 羅馬數字通常從左到右, 並按照由大到小的順序表示.
+    2. 羅馬數字中的4表示為IV而不是IIII, IV表示 -1 + 5 = 4. 同理9也適用.
+    3. 數字27表示為XXVII, 即 XX(20)+ V(5)+ II(2)
+    """
+
     ROMAN_TO_INT_MAPPING = {
         "I": 1,
         "V": 5,
@@ -20,6 +26,13 @@ class RomanConverter:
     ]
 
     def romanToInt(self, s: str) -> int:
+        """思路
+        1. 建立羅馬字轉數字的轉換表。
+        2. 將輸入的羅馬字串從低位到高位進行迭代。
+        3. 對於每個羅馬字元, 使用轉換表查找對應的數字值。
+        4. 如果遇到的羅馬字元比列表中的最後一個大, 表示需要進行減法操作。
+        5. 將每個羅馬字元對應的數字值加總得到結果。
+        """
         self._check_string_length(s)
 
         self.check_valid_roman(s)
@@ -42,6 +55,19 @@ class RomanConverter:
         return result
 
     def intToRoman(self, num: int) -> str:
+        """概念
+        1. 羅馬數字系統每位數由符號x1、x5、x10的組合表示。
+        2. 下一組的轉換表, 是通過將符號乘以10表示。如, x10, x50, x100等。
+        """
+        """思路
+        1. 建立數字轉換為羅馬數字的轉換表。
+        2. 將輸入的羅馬數字從低位到高位進行迭代。(個位、十位、百位)
+        3. 如果數字為9, 將x1和x10組合添加到列表中。
+        4. 如果數字大於或等於5, 將第x5和x1重複組合添加到列表中。
+        5. 如果數字為4, 將x1和第x5組合添加到列表中。
+        6. 對於其他數字小於4, 將x1重複添加到列表中。
+        7. 將羅馬數字符號列表反轉並連接為一個字符串。
+        """
         self._check_integer_range(num)
 
         digit_list = [int(digit) for digit in reversed(str(num))]
