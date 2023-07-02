@@ -1,12 +1,8 @@
 import unittest
 
-class Solution:
+class RomanConverter:
     def romanToInt(self, s: str) -> int:
-        if not (1 <= len(s) <= 15):
-            raise ValueError("s must have a length between 1 and 15")
-        
-        if not isinstance(s, str):
-            raise TypeError("s must be a string")
+        self._check_string_length(s)
         
         roman_to_int = {
             'I': 1, 'V': 5,
@@ -33,17 +29,12 @@ class Solution:
             result_array.append(char_rst)
         result = sum(result_array)
 
-        if not 1 <= result <= 3999:
-            raise ValueError("Result must be between 1 and 3999, your result is {}".format(result))
-        
+        self._check_result_range(result)
+
         return result
     
     def intToRoman(self, num: int) -> str:
-        if not isinstance(num, int):
-            raise TypeError("num must be a int")
-        
-        if not (1 <= num <= 3999):
-            raise ValueError("num must have a size between 1 and 3999")
+        self._check_num_range(num)
 
         ROMAN_LIST = [
             ["I", "V", "X"],
@@ -69,10 +60,28 @@ class Solution:
         result = "".join(roman_symbols[::-1])
         
         return result
+    
+    def _check_string_length(self, s: str):
+        if not (1 <= len(s) <= 15):
+            raise ValueError("s must have a length between 1 and 15")
+
+        if not isinstance(s, str):
+            raise TypeError("s must be a string")
+        
+    def _check_result_range(self, result: int):
+        if not 1 <= result <= 3999:
+            raise ValueError("Result must be between 1 and 3999, your result is {}".format(result))
+
+    def _check_num_range(self, num: int):
+        if not isinstance(num, int):
+            raise TypeError("num must be an integer")
+        
+        if not (1 <= num <= 3999):
+            raise ValueError("num must have a value between 1 and 3999")
 
 class TestRomanToInt(unittest.TestCase):
     def setUp(self):
-        self.solution = Solution()
+        self.solution = RomanConverter()
 
     # 異常檢查
     def test_romanToInt_1_length_error(self):
@@ -111,7 +120,7 @@ class TestRomanToInt(unittest.TestCase):
 
 class TestIntToRoman(unittest.TestCase):
     def setUp(self):
-        self.solution = Solution()
+        self.solution = RomanConverter()
     
     # 異常檢查
     def test_intToRoman_1_size_error(self):
