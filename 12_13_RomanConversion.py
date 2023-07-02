@@ -1,18 +1,22 @@
 import unittest
 
+
 class RomanConverter:
     ROMAN_TO_INT_MAPPING = {
-        'I': 1, 'V': 5,
-        'X': 10, 'L': 50,
-        'C': 100, 'D': 500,
-        'M': 1000
+        "I": 1,
+        "V": 5,
+        "X": 10,
+        "L": 50,
+        "C": 100,
+        "D": 500,
+        "M": 1000,
     }
 
     INT_TO_ROMAN_MAPPING = [
         ["I", "V", "X"],
         ["X", "L", "C"],
         ["C", "D", "M"],
-        ["M", "A", "A"]
+        ["M", "A", "A"],
     ]
 
     def romanToInt(self, s: str) -> int:
@@ -36,10 +40,10 @@ class RomanConverter:
         self._check_integer_range(result)
 
         return result
-    
+
     def intToRoman(self, num: int) -> str:
         self._check_integer_range(num)
-    
+
         digit_list = [int(digit) for digit in reversed(str(num))]
         roman_symbols = []
         for i in range(len(digit_list)):
@@ -55,16 +59,16 @@ class RomanConverter:
             else:
                 roman_symbols.append(symbols[0] * digit)
         result = "".join(roman_symbols[::-1])
-        
+
         return result
-    
+
     def _check_string_length(self, s: str):
         if not isinstance(s, str):
             raise TypeError("s must be a string")
-        
+
         if not (1 <= len(s) <= 15):
             raise ValueError("s must have a length between 1 and 15")
-    
+
     def check_valid_roman(self, s: str):
         valid_values = set(self.ROMAN_TO_INT_MAPPING.keys())
         for char in s:
@@ -74,9 +78,10 @@ class RomanConverter:
     def _check_integer_range(self, value: int):
         if not isinstance(value, int):
             raise TypeError("value must be an integer")
-        
+
         if not (1 <= value <= 3999):
             raise ValueError("value must have a value between 1 and 3999")
+
 
 class TestRomanToInt(unittest.TestCase):
     def setUp(self):
@@ -85,7 +90,9 @@ class TestRomanToInt(unittest.TestCase):
     # 異常檢查
     def test_romanToInt_1_length_error(self):
         self.assertRaises(ValueError, self.solution.romanToInt, "")  # 長度小於1
-        self.assertRaises(ValueError, self.solution.romanToInt, "IIIIIIIIIIIIIIII")  # 長度大於15
+        self.assertRaises(
+            ValueError, self.solution.romanToInt, "IIIIIIIIIIIIIIII"
+        )  # 長度大於15
 
     def test_romanToInt_1_value_error(self):
         self.assertRaises(ValueError, self.solution.romanToInt, "A")
@@ -94,7 +101,7 @@ class TestRomanToInt(unittest.TestCase):
         self.assertRaises(TypeError, self.solution.romanToInt, 1)
 
     def test_romanToInt_1_result_error(self):
-        self.assertRaises(ValueError, self.solution.romanToInt, "MMMMCMXCIV") # 4994
+        self.assertRaises(ValueError, self.solution.romanToInt, "MMMMCMXCIV")  # 4994
 
     # testcase
     def test_romanToInt_III(self):
@@ -117,10 +124,11 @@ class TestRomanToInt(unittest.TestCase):
         result = self.solution.romanToInt("MCMXCIV")
         self.assertEqual(result, 1994)
 
+
 class TestIntToRoman(unittest.TestCase):
     def setUp(self):
         self.solution = RomanConverter()
-    
+
     # 異常檢查
     def test_intToRoman_1_size_error(self):
         self.assertRaises(ValueError, self.solution.intToRoman, 0)  # 大小小於1
@@ -133,15 +141,15 @@ class TestIntToRoman(unittest.TestCase):
     def test_intToRoman_III(self):
         result = self.solution.intToRoman(3)
         self.assertEqual(result, "III")
-    
+
     def test_intToRoman_IV(self):
         result = self.solution.intToRoman(4)
         self.assertEqual(result, "IV")
-    
+
     def test_intToRoman_IX(self):
         result = self.solution.intToRoman(9)
         self.assertEqual(result, "IX")
-    
+
     def test_intToRoman_LVIII(self):
         result = self.solution.intToRoman(58)
         self.assertEqual(result, "LVIII")
@@ -151,8 +159,7 @@ class TestIntToRoman(unittest.TestCase):
         self.assertEqual(result, "MCMXCIV")  # [5, -1, 100, -10, 1000, -100, 1000]
 
 
-
-if __name__=="__main__":
+if __name__ == "__main__":
     # unittest.main(
     #     failfast=True,  # 啓用 failfast 選項
     #     verbosity=2
@@ -165,11 +172,8 @@ if __name__=="__main__":
     suite.addTest(test_case_1)
     suite.addTest(test_case_2)
     # 創建測試運行器
-    runner = unittest.TextTestRunner(
-        failfast=True,
-        verbosity=2
-    )
-    runner.run(suite)   # 運行測試
+    runner = unittest.TextTestRunner(failfast=True, verbosity=2)
+    runner.run(suite)  # 運行測試
 
     # import sys
     # sys.argv.append("-h")
