@@ -1,9 +1,9 @@
 import unittest
 
 class Solution:
-    def romanToInt(self, s):
+    def romanToInt(self, s: str) -> int:
         if not (1 <= len(s) <= 15):
-            raise ValueError("s must have length between 1 and 15")
+            raise ValueError("s must have a length between 1 and 15")
         
         if not isinstance(s, str):
             raise TypeError("s must be a string")
@@ -37,8 +37,40 @@ class Solution:
             raise ValueError("Result must be between 1 and 3999, your result is {}".format(result))
         
         return result
+    
+    def intToRoman(self, num: int) -> str:
+        if not isinstance(num, int):
+            raise TypeError("num must be a int")
+        
+        if not (1 <= num <= 3999):
+            raise ValueError("num must have a size between 1 and 3999")
 
-class TestSolution(unittest.TestCase):
+        ROMAN_LIST = [
+            ["I", "V", "X"],
+            ["X", "L", "C"],
+            ["C", "D", "M"],
+            ["M", "A", "A"],
+        ]
+        
+        digit_list = [int(digit) for digit in reversed(str(num))]
+        roman_symbols = []
+        for i in range(len(digit_list)):
+            digit = digit_list[i]
+            symbols = ROMAN_LIST[i]
+
+            if digit == 9:
+                roman_symbols.append(symbols[0] + symbols[2])
+            elif digit >= 5:
+                roman_symbols.append(symbols[1] + symbols[0] * (digit - 5))
+            elif digit == 4:
+                roman_symbols.append(symbols[0] + symbols[1])
+            else:
+                roman_symbols.append(symbols[0] * digit)
+        result = "".join(roman_symbols[::-1])
+        
+        return result
+
+class TestRomanToInt(unittest.TestCase):
     def setUp(self):
         self.solution = Solution()
 
@@ -77,12 +109,59 @@ class TestSolution(unittest.TestCase):
         result = self.solution.romanToInt("MCMXCIV")
         self.assertEqual(result, 1994)
 
+class TestIntToRoman(unittest.TestCase):
+    def setUp(self):
+        self.solution = Solution()
+    
+    # 異常檢查
+    def test_intToRoman_1_size_error(self):
+        self.assertRaises(ValueError, self.solution.intToRoman, 0)  # 大小小於1
+        self.assertRaises(ValueError, self.solution.intToRoman, 4000)  # 大小大於3999
+
+    def test_intToRoman_1_type_error(self):
+        self.assertRaises(TypeError, self.solution.intToRoman, "I")
+
+    # testcase
+    def test_intToRoman_III(self):
+        result = self.solution.intToRoman(3)
+        self.assertEqual(result, "III")
+    
+    def test_intToRoman_IV(self):
+        result = self.solution.intToRoman(4)
+        self.assertEqual(result, "IV")
+    
+    def test_intToRoman_IX(self):
+        result = self.solution.intToRoman(9)
+        self.assertEqual(result, "IX")
+    
+    def test_intToRoman_LVIII(self):
+        result = self.solution.intToRoman(58)
+        self.assertEqual(result, "LVIII")
+
+    def test_intToRoman_MCMXCIV(self):
+        result = self.solution.intToRoman(1994)
+        self.assertEqual(result, "MCMXCIV")  # [5, -1, 100, -10, 1000, -100, 1000]
+
+
 
 if __name__=="__main__":
-    unittest.main(
-        failfast=True,  # 啓用 failfast 選項
+    # unittest.main(
+    #     failfast=True,  # 啓用 failfast 選項
+    #     verbosity=2
+    # )
+
+    # 創建測試套件
+    suite = unittest.TestSuite()
+    test_case_1 = unittest.TestLoader().loadTestsFromTestCase(TestRomanToInt)
+    test_case_2 = unittest.TestLoader().loadTestsFromTestCase(TestIntToRoman)
+    suite.addTest(test_case_1)
+    suite.addTest(test_case_2)
+    # 創建測試運行器
+    runner = unittest.TextTestRunner(
+        failfast=True,
         verbosity=2
     )
+    runner.run(suite)   # 運行測試
 
     # import sys
     # sys.argv.append("-h")
