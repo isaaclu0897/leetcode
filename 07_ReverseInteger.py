@@ -15,6 +15,9 @@ class Solution:
         3. 將反轉後的數字字串轉換為整數. 並恢復數字的符號
         4. 檢查反轉後的數字是否超出32位有符號整數的範圍. 如果是, 將結果設為0
         5. 誤,這題的精神絕對不是這樣XD
+
+        p.s. 這文章似乎解答了我的問題。函數不是不能用, 重點在於你是否瞭解這個函數背後的邏輯與算法。
+        https://hung-yanbin.medium.com/leetcode-%E5%B0%8F%E5%88%86%E4%BA%AB-reverse-integer-b1716d8d8d1a
         """
         # Check if x is within the valid range for a 32-bit signed integer
         if not (-(2**32) <= x <= 2**31 - 1):
